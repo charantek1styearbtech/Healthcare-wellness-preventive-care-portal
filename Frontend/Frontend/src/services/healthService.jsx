@@ -9,7 +9,7 @@ export const getPatientHealthData = async () => {
     },
     {
       id: 2,
-      title: "Active Time",
+      title: "Active time",
       value: 56,
       goal: 60,
       unit: "mins",

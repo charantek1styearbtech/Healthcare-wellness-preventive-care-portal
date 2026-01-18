@@ -7,13 +7,16 @@ import { getPatientHealthData } from "../services/healthService";
 const Dashboard = () => {
   const [healthData, setHealthData] = useState([]);
 
+  
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await getPatientHealthData();
       setHealthData(data);
+      
     };
     fetchData();
-  }, []);
+  },[]);
 
   return (
     <div className="dashboard">
@@ -24,6 +27,7 @@ const Dashboard = () => {
         <h3>Wellness Goals</h3>
 
         <div className="goals-grid">
+          
           {healthData.map((item) => (
             <HealthCard key={item.id} title={item.title}>
               <p className="metric-value">

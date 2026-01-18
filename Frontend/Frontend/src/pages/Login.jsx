@@ -1,25 +1,47 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { loginUser, signupUser } from "../services/authService";
 import Navbar from "../components/layout/Navbar";
 import "./Login.css";
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [role, setRole] = useState("patient");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // For now login directly (same flow for signup)
-    login({ name: "David", role });
+    try {
+      const payload = {
+        name,
+        email,
+        password,
+        role,
+      };
 
-    role === "patient"
-      ? navigate("/patient/dashboard")
-      : navigate("/provider/dashboard");
+      const response = isSignup
+        ? await signupUser(payload)
+        : await loginUser({ email, password, role });
+
+      // Save user & token
+      login(response.user);
+      localStorage.setItem("token", response.token);
+
+      role === "patient"
+        ? navigate("/patient/dashboard")
+        : navigate("/provider/dashboard");
+    } catch (err) {
+      setError("Invalid credentials. Please try again.");
+    }
   };
 
   return (
@@ -28,47 +50,37 @@ const Login = () => {
 
       <div className="login-page">
         <div className="login-card">
-          {/* Toggle */}
-          <div className="auth-toggle">
-            <button
-              className={!isSignup ? "active" : ""}
-              onClick={() => setIsSignup(false)}
-            >
-              Login
-            </button>
-            <button
-              className={isSignup ? "active" : ""}
-              onClick={() => setIsSignup(true)}
-            >
-              Signup
-            </button>
-          </div>
+          {/* toggle stays same */}
 
-          <h2>{isSignup ? "Create Account" : "Welcome Back"}</h2>
-          <p className="login-subtext">
-            {isSignup
-              ? "Sign up to start your healthcare journey"
-              : "Login to continue your healthcare journey"}
-          </p>
+          {error && <p className="error-text">{error}</p>}
 
           <form onSubmit={handleSubmit}>
             {isSignup && (
               <div className="form-group">
                 <label>Full Name</label>
-                <input type="text" placeholder="Enter your name" required />
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
               </div>
             )}
 
             <div className="form-group">
               <label>Email</label>
-              <input type="email" placeholder="Enter your email" required />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             <div className="form-group">
               <label>Password</label>
               <input
                 type="password"
-                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
