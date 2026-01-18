@@ -1,0 +1,45 @@
+.messages-page {
+  max-width: 900px;
+}
+
+/* Title */
+.messages-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a237e;
+  margin-bottom: 24px;
+}
+
+/* Message card */
+.message-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+  margin-bottom: 18px;
+}
+
+/* Header */
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.doctor-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.message-date {
+  font-size: 12px;
+  color: #607d8b;
+}
+
+/* Text */
+.message-text {
+  font-size: 14px;
+  color: #37474f;
+  line-height: 1.6;
+}
